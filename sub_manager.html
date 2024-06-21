@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Team Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .column {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .player {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        button.active {
+            background-color: #FF4500;
+            box-shadow: 0 0 10px rgba(255,69,0,0.5);
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+        }
+        #matchTime {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            display: block;
+        }
+        #subSuggestion {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e6f7ff;
+            border-radius: 5px;
+            border: 1px solid #91d5ff;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+            .column {
+                width: 48%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Soccer Team Manager</h1>
+    
+    <div>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button onclick="addPlayer()">Add Player</button>
+    </div>
+    
+    <div>
+        <h2>Match Time: <span id="matchTime">00:00</span></h2>
+        <div class="controls">
+            <button id="startBtn" onclick="toggleMatch()">Start Match</button>
+            <button id="resetBtn" onclick="resetMatch()">Reset Match</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="column">
+            <h2>On Field (<span id="fieldCount">0</span>/5)</h2>
+            <div id="fieldPlayers"></div>
+        </div>
+        <div class="column">
+            <h2>On Bench</h2>
+            <div id="benchPlayers"></div>
+        </div>
+    </div>
+    
+    <div id="subSuggestion"></div>
+
+    <script>
+        let gameState = JSON.parse(localStorage.getItem('gameState')) || {
+            players: {},
+            onField: [],
+            elapsedTime: 0,
+            isRunning: false,
+            lastUpdate: null
+        };
+
+        let updateInterval;
+
+        function saveState() {
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        function addPlayer() {
+            const nameInput = document.getElementById('playerName');
+            const name = nameInput.value.trim();
+            if (name && !(name in gameState.players)) {
+                gameState.players[name] = { fieldTime: 0, benchTime: 0, isOnField: false, fieldEntries: 0 };
+                saveState();
+                updateDisplay();
+            }
+            nameInput.value = '';
+        }
+
+        function toggleMatch() {
+            if (gameState.isRunning) {
+                pauseMatch();
+            } else {
+                startMatch();
+            }
+        }
+
+        function startMatch() {
+            //if (!gameState.isRunning) {
+                gameState.isRunning = true;
+                gameState.lastUpdate = Date.now();
+                updateInterval = setInterval(updateGame, 1000);
+                updateMatchControls();
+                saveState();
+            // }
+        }
+
+        function pauseMatch() {
+            if (gameState.isRunning) {
+                gameState.isRunning = false;
+                clearInterval(updateInterval);
+                updateElapsedTime();
+                updateMatchControls();
+                saveState();
+            }
+        }
+
+        function resetMatch() {
+            pauseMatch();
+            gameState.elapsedTime = 0;
+            gameState.onField = [];
+            for (let player in gameState.players) {
+                gameState.players[player].fieldTime = 0;
+                gameState.players[player].benchTime = 0;
+                gameState.players[player].isOnField = false;
+                gameState.players[player].fieldEntries = 0;
+            }
+            saveState();
+            updateDisplay();
+            updateMatchTimeDisplay();
+        }
+
+        function updateGame() {
+            updateElapsedTime();
+            updatePlayerTimes();
+            updateDisplay();
+            saveState();
+        }
+
+        function updateElapsedTime() {
+            if (gameState.isRunning) {
+                const now = Date.now();
+                gameState.elapsedTime += now - gameState.lastUpdate;
+                gameState.lastUpdate = now;
+            }
+        }
+
+        function updatePlayerTimes() {
+            const elapsedSeconds = Math.floor(gameState.elapsedTime / 1000);
+            for (let player in gameState.players) {
+                if (gameState.players[player].isOnField) {
+                    gameState.players[player].fieldTime = elapsedSeconds;
+                } else {
+                    gameState.players[player].benchTime = elapsedSeconds;
+                }
+            }
+        }
+
+        function updateMatchTimeDisplay() {
+            const totalSeconds = Math.floor(gameState.elapsedTime / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            document.getElementById('matchTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateMatchControls() {
+            const startBtn = document.getElementById('startBtn');
+            startBtn.textContent = gameState.isRunning ? 'Pause Match' : 'Start Match';
+            startBtn.classList.toggle('active', gameState.isRunning);
+        }
+
+        function subOn(player) {
+            if (gameState.onField.length < 5 && !gameState.players[player].isOnField) {
+                gameState.onField.push(player);
+                gameState.players[player].isOnField = true;
+                gameState.players[player].fieldEntries++;
+                saveState();
+                updateDisplay();
+            }
+        }
+
+        function subOff(player) {
+            const index = gameState.onField.indexOf(player);
+            if (index > -1) {
+                gameState.onField.splice(index, 1);
+                gameState.players[player].isOnField = false;
+                saveState();
+                updateDisplay();
+            }
+        }
+
+        function suggestSub() {
+            if (gameState.onField.length < 5) {
+                const bench = Object.keys(gameState.players).filter(p => !gameState.players[p].isOnField);
+                if (bench.length > 0) {
+                    return `Sub on: ${bench.reduce((a, b) => gameState.players[a].fieldTime < gameState.players[b].fieldTime ? a : b)}`;
+                }
+                return "No players available on the bench.";
+            } else {
+                return `Sub off: ${gameState.onField.reduce((a, b) => gameState.players[a].fieldTime > gameState.players[b].fieldTime ? a : b)}`;
+            }
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}m ${remainingSeconds}s`;
+        }
+
+        function updateDisplay() {
+            updateMatchTimeDisplay();
+            document.getElementById('fieldPlayers').innerHTML = gameState.onField.map(p => 
+                `<div class="player">
+                    <span>${p} (${formatTime(gameState.players[p].fieldTime)}) - Entries: ${gameState.players[p].fieldEntries}</span>
+                    <button onclick="subOff('${p}')">Sub Off</button>
+                </div>`
+            ).join('');
+
+            const bench = Object.keys(gameState.players).filter(p => !gameState.players[p].isOnField)
+                .sort((a, b) => gameState.players[a].fieldTime - gameState.players[b].fieldTime);
+            document.getElementById('benchPlayers').innerHTML = bench.map(p => 
+                `<div class="player">
+                    <span>${p} (${formatTime(gameState.players[p].fieldTime)}) - Entries: ${gameState.players[p].fieldEntries}</span>
+                    <button onclick="subOn('${p}')">Sub On</button>
+                </div>`
+            ).join('');
+
+            document.getElementById('subSuggestion').textContent = suggestSub();
+            document.getElementById('fieldCount').textContent = gameState.onField.length;
+        }
+
+        // Add event listener for Enter key on player name input
+        document.getElementById('playerName').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addPlayer();
+            }
+        });
+
+        // Initial setup
+        function initializeGame() {
+            if (gameState.isRunning) {
+                updateElapsedTime();
+                startMatch();
+            }
+            updatePlayerTimes();
+            updateDisplay();
+            updateMatchControls();
+        }
+
+        initializeGame();
+    </script>
+</body>
+</html>
