@@ -4,7 +4,7 @@ let gameInterval;
 let isGameRunning = false;
 let ownScore = 0;
 let otherScore = 0;
-const rosterPlayers = ["Max", "Austo Wilson", "Mathew", "Xander", "Avery", "Austin levins", "Eve", "Amelia", "Fletcher"];
+const rosterPlayers = ["Max", "Austo Wilson", "Mathew", "Avery", "Austin levins", "Evie", "Amelia", "Fletcher"];
 const MAX_FIELD_PLAYERS = 5;
 
 const toggleGameBtn = document.getElementById('toggleGameBtn');

@@ -6,7 +6,9 @@
     <title>Soccer Team Management App</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
 </head>
 <body>
     <div class="container">
@@ -52,11 +54,16 @@
             <input type="text" id="playerName" placeholder="Enter player name">
             <button id="addPlayerBtn"><i class="fas fa-plus"></i></button>
         </div>
-        <h2>Roster</h2>
+        <h2>Add Player from Roster</h2>
         <div id="roster" class="roster"></div>
-        <button id="addAllPlayersBtn">Add All Players from Roster</button>
-        <button id="managePlayersBtn">Manage Players</button>
-        <button id="clearStateBtn">Clear All Data</button>
+        <button id="addAllPlayersBtn" class="action-btn">Add All Players from Roster</button>
+        <div class="management-section">
+            <h2>Management Options</h2>
+            <div class="management-buttons">
+                <button id="managePlayersBtn">Manage Players</button>
+                <button id="clearStateBtn" class="danger-btn">Clear All Data</button>
+            </div>
+        </div>
     </div>
     <div id="managePlayersModal" class="modal">
         <div class="modal-content">
