@@ -8,7 +8,7 @@ const rosterPlayers = ["Max", "Austo Wilson", "Mathew", "Xander", "Avery", "Aust
 const MAX_FIELD_PLAYERS = 5;
 
 const toggleGameBtn = document.getElementById('toggleGameBtn');
-const resetBtn = document.getElementById('resetBtn');
+const resetGameBtn = document.getElementById('resetGameBtn');
 const clearStateBtn = document.getElementById('clearStateBtn');
 const addPlayerBtn = document.getElementById('addPlayerBtn');
 const playerNameInput = document.getElementById('playerName');
@@ -21,7 +21,7 @@ const rosterDiv = document.getElementById('roster');
 const addAllPlayersBtn = document.getElementById('addAllPlayersBtn');
 
 toggleGameBtn.onclick = startPauseGame;
-resetBtn.onclick = resetGame;
+resetGameBtn.onclick = confirmResetGame;
 clearStateBtn.onclick = clearState;
 addPlayerBtn.onclick = () => addPlayer();
 addAllPlayersBtn.onclick = addAllPlayers;

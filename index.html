@@ -12,42 +12,51 @@
     <div class="container">
         <h1>Soccer Team Management</h1>
         <div id="gameTimeBlock" class="game-time-block">
-            <div id="gameTime">Game Time: 00:00</div>
-            <button id="toggleGameBtn" class="toggle-game-btn">
-                <i class="fas fa-play"></i>
-            </button>
+            <div class="game-time-wrapper">
+                <div id="gameTime">Game Time: 00:00</div>
+            </div>
+            <div class="game-controls">
+                <button id="toggleGameBtn" class="toggle-game-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="resetGameBtn" class="reset-game-btn">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
         </div>
         <div class="score-container">
             <div class="score-box">
-                <div class="score-label">Our Team</div>
-                <div id="ownScoreValue" class="score-value">0</div>
-                <div class="score-buttons">
+                <span class="score-label">Our Team</span>
+                <div class="score-controls">
                     <button class="score-btn" onclick="updateScore('own', -1)">-</button>
+                    <span id="ownScoreValue" class="score-value">0</span>
                     <button class="score-btn" onclick="updateScore('own', 1)">+</button>
                 </div>
             </div>
+            <div class="score-divider"></div>
             <div class="score-box">
-                <div class="score-label">Their Team</div>
-                <div id="otherScoreValue" class="score-value">0</div>
-                <div class="score-buttons">
+                <span class="score-label">Their Team</span>
+                <div class="score-controls">
                     <button class="score-btn" onclick="updateScore('other', -1)">-</button>
+                    <span id="otherScoreValue" class="score-value">0</span>
                     <button class="score-btn" onclick="updateScore('other', 1)">+</button>
                 </div>
             </div>
         </div>
-        <button id="resetBtn">Reset Game</button>
-        <button id="clearStateBtn">Clear All Data</button>
-        <h2>Add Player</h2>
-        <input type="text" id="playerName" placeholder="Enter player name">
-        <button id="addPlayerBtn">Add Player</button>
         <h2>Field</h2>
         <div id="field" class="field"></div>
         <h2>Bench</h2>
         <div id="bench" class="bench"></div>
+        <h2>Add New Player</h2>
+        <div class="add-player-container">
+            <input type="text" id="playerName" placeholder="Enter player name">
+            <button id="addPlayerBtn"><i class="fas fa-plus"></i></button>
+        </div>
         <h2>Roster</h2>
         <div id="roster" class="roster"></div>
         <button id="addAllPlayersBtn">Add All Players from Roster</button>
         <button id="managePlayersBtn">Manage Players</button>
+        <button id="clearStateBtn">Clear All Data</button>
     </div>
     <div id="managePlayersModal" class="modal">
         <div class="modal-content">

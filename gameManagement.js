@@ -31,6 +31,12 @@ function startPauseGame() {
     updateUI();
 }
 
+function confirmResetGame() {
+    if (confirm('Are you sure you want to reset the game? This will clear all current game data.')) {
+        resetGame();
+    }
+}
+
 function resetGame() {
     pauseGame();
     gameTime = 0;
