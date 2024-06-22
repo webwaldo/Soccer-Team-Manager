@@ -28,6 +28,7 @@ function startPauseGame() {
     } else {
         startGame();
     }
+    updateUI();
 }
 
 function resetGame() {

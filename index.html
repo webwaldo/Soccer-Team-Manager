@@ -11,7 +11,12 @@
 <body>
     <div class="container">
         <h1>Soccer Team Management</h1>
-        <div id="gameTime">Game Time: 00:00</div>
+        <div id="gameTimeBlock" class="game-time-block">
+            <div id="gameTime">Game Time: 00:00</div>
+            <button id="toggleGameBtn" class="toggle-game-btn">
+                <i class="fas fa-play"></i>
+            </button>
+        </div>
         <div class="score-container">
             <div class="score-box">
                 <div class="score-label">Our Team</div>
@@ -30,7 +35,6 @@
                 </div>
             </div>
         </div>
-        <button id="startPauseBtn">Start Game</button>
         <button id="resetBtn">Reset Game</button>
         <button id="clearStateBtn">Clear All Data</button>
         <h2>Add Player</h2>

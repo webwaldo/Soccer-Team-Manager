@@ -36,11 +36,17 @@ function updateUI() {
     fieldPlayers.forEach(player => createPlayerElement(player, fieldDiv));
     benchPlayers.forEach(player => createPlayerElement(player, benchDiv));
 
+    const gameTimeBlock = document.getElementById('gameTimeBlock');
+    const toggleGameBtn = document.getElementById('toggleGameBtn');
+
+    gameTimeBlock.className = isGameRunning ? 'game-time-block' : 'game-time-block paused';
+    toggleGameBtn.innerHTML = isGameRunning ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+
+
     gameTimeDiv.textContent = `Game Time: ${formatTime(gameTime)}`;
     gameTimeDiv.className = isGameRunning ? 'active' : 'paused';
     ownScoreValue.textContent = ownScore;
     otherScoreValue.textContent = otherScore;
-    startPauseBtn.textContent = isGameRunning ? 'Pause Game' : 'Start Game';
     saveState();
     updateRoster();
 

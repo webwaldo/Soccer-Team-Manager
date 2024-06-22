@@ -270,3 +270,41 @@ button:disabled {
 .modal-remove-btn:hover {
     background-color: #c0392b;
 }
+
+
+.game-time-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2ecc71;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.game-time-block.paused {
+    background-color: #e74c3c;
+}
+
+#gameTime {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.toggle-game-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.toggle-game-btn:hover {
+    transform: scale(1.1);
+}
+
+.toggle-game-btn:focus {
+    outline: none;
+}
