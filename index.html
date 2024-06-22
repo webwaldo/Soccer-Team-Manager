@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Team Management App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Soccer Team Management</h1>
+        <div id="gameTime">Game Time: 00:00</div>
+        <div class="score-container">
+            <div class="score-box">
+                <div class="score-label">Our Team</div>
+                <div id="ownScoreValue" class="score-value">0</div>
+                <div class="score-buttons">
+                    <button class="score-btn" onclick="updateScore('own', -1)">-</button>
+                    <button class="score-btn" onclick="updateScore('own', 1)">+</button>
+                </div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">Their Team</div>
+                <div id="otherScoreValue" class="score-value">0</div>
+                <div class="score-buttons">
+                    <button class="score-btn" onclick="updateScore('other', -1)">-</button>
+                    <button class="score-btn" onclick="updateScore('other', 1)">+</button>
+                </div>
+            </div>
+        </div>
+        <button id="startPauseBtn">Start Game</button>
+        <button id="resetBtn">Reset Game</button>
+        <button id="clearStateBtn">Clear All Data</button>
+        <h2>Add Player</h2>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button id="addPlayerBtn">Add Player</button>
+        <h2>Field</h2>
+        <div id="field" class="field"></div>
+        <h2>Bench</h2>
+        <div id="bench" class="bench"></div>
+        <h2>Roster</h2>
+        <div id="roster" class="roster"></div>
+        <button id="addAllPlayersBtn">Add All Players from Roster</button>
+        <button id="managePlayersBtn">Manage Players</button>
+    </div>
+    <div id="managePlayersModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Manage Players</h2>
+            <div id="modalPlayerList"></div>
+        </div>
+    </div>
+    <script src="playerManagement.js"></script>
+    <script src="gameManagement.js"></script>
+    <script src="uiManagement.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
