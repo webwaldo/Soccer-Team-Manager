@@ -28,6 +28,10 @@ export const useSoccerStore = defineStore('soccer', {
     removePlayer(name) {
       this.players = this.players.filter(p => p.name !== name);
     },
+  
+    removeRosterPlayer(name) {
+      this.rosterPlayers = this.rosterPlayers.filter(p => p !== name);
+    },
     updateScore(team, change) {
       if (team === 'own') {
         this.ownScore = Math.max(0, this.ownScore + change);
