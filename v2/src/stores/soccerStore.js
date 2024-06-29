@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useSoccerStore = defineStore('soccer', {
   state: () => ({
     players: [],
+    rosterPlayers: ["Max", "Austo Wilson", "Mathew", "Avery", "Austin levins", "Evie", "Amelia", "Fletcher"],
     gameTime: 0,
     ownScore: 0,
     otherScore: 0,
@@ -22,11 +23,6 @@ export const useSoccerStore = defineStore('soccer', {
           return;
         }
         player.onField = !player.onField;
-      }
-    },
-    addPlayer(name) {
-      if (!this.players.some(p => p.name === name)) {
-        this.players.push({ name, onField: false, fieldTime: 0, benchTime: 0 });
       }
     },
     removePlayer(name) {
@@ -93,6 +89,34 @@ export const useSoccerStore = defineStore('soccer', {
         ...this.$state,
         lastUpdateTime: this.isGameRunning ? Date.now() : null,
       }));
+    },
+    movePlayerToRoster(name) {
+      const playerIndex = this.players.findIndex(p => p.name === name);
+      if (playerIndex !== -1) {
+        const player = this.players[playerIndex];
+        this.players.splice(playerIndex, 1);
+        if (!this.rosterPlayers.includes(player.name)) {
+          this.rosterPlayers.push(player.name);
+        }
+      }
+    },
+
+    addPlayer(name) {
+      if (!this.players.some(p => p.name === name)) {
+        this.players.push({ name, onField: false, fieldTime: 0, benchTime: 0 });
+        const rosterIndex = this.rosterPlayers.indexOf(name);
+        if (rosterIndex !== -1) {
+          this.rosterPlayers.splice(rosterIndex, 1);
+        }
+      }
+    },
+
+    clearPlayerStats(name) {
+      const player = this.players.find(p => p.name === name);
+      if (player) {
+        player.fieldTime = 0;
+        player.benchTime = 0;
+      }
     },
   },
 })
