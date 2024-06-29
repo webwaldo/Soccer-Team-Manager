@@ -3,6 +3,7 @@
     <h1>Soccer Subs App</h1>
     <GameTime />
     <ScoreBoard />
+    <SubTimer />
     <PlayerList title="Field" :players="store.fieldPlayers" @toggle-position="store.togglePlayerPosition" />
     <PlayerList title="Bench" :players="store.benchPlayers" @toggle-position="store.togglePlayerPosition" />
     <AddPlayer @add-player="store.addPlayer" />
@@ -16,6 +17,7 @@ import { onMounted, watch } from 'vue';
 import { useSoccerStore } from './stores/soccerStore';
 import GameTime from './components/GameTime.vue';
 import ScoreBoard from './components/ScoreBoard.vue';
+import SubTimer from './components/SubTimer.vue';
 import PlayerList from './components/PlayerList.vue';
 import AddPlayer from './components/AddPlayer.vue';
 import RosterList from './components/RosterList.vue';
@@ -26,6 +28,7 @@ export default {
   components: {
     GameTime,
     ScoreBoard,
+    SubTimer,
     PlayerList,
     AddPlayer,
     RosterList,
