@@ -3,12 +3,13 @@ import { defineStore } from 'pinia'
 export const useSoccerStore = defineStore('soccer', {
   state: () => ({
     players: [],
-    rosterPlayers: ["Max", "Austo Wilson", "Mathew", "Avery", "Austin levins", "Evie", "Amelia", "Fletcher"],
+    rosterPlayers: [],
     gameTime: 0,
     ownScore: 0,
     otherScore: 0,
     isGameRunning: false,
     lastUpdateTime: null,
+    clearStateFlag: 0,
   }),
   getters: {
     fieldPlayers: (state) => state.players.filter(p => p.onField),
@@ -61,6 +62,7 @@ export const useSoccerStore = defineStore('soccer', {
     },
     clearState() {
       this.$reset();
+      this.clearStateFlag++; // Increment the flag to trigger watchers
     },
     updateGameTime() {
       if (this.isGameRunning) {

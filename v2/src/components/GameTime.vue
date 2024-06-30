@@ -91,3 +91,14 @@
     }
   };
   </script>
+
+<style scoped>
+.game-time-block {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin-bottom: 20px; /* Add some space below the sticky element */
+  transition: background-color 0.3s ease;
+}
+
+</style>
