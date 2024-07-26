@@ -12,8 +12,8 @@ export const useSoccerStore = defineStore('soccer', {
     clearStateFlag: 0,
   }),
   getters: {
-    fieldPlayers: (state) => state.players.filter(p => p.onField),
-    benchPlayers: (state) => state.players.filter(p => !p.onField),
+    fieldPlayers: (state) => state.players.filter(p => p.onField).sort((a, b) => b.fieldTime - a.fieldTime),
+    benchPlayers: (state) => state.players.filter(p => !p.onField).sort((a, b) => b.benchTime - a.benchTime),
   },
   actions: {
     togglePlayerPosition(name) {
