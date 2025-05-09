@@ -19,8 +19,8 @@ export const useSoccerStore = defineStore('soccer', {
     togglePlayerPosition(name) {
       const player = this.players.find(p => p.name === name);
       if (player) {
-        if (!player.onField && this.fieldPlayers.length >= 5) {
-          alert("You can't add more than 5 players to the field.");
+        if (!player.onField && this.fieldPlayers.length >= 7) {
+          alert("You can't add more than 7 players to the field.");
           return;
         }
         player.onField = !player.onField;
