@@ -9,7 +9,20 @@
     <GameTime />
     <ScoreBoard />
     <SubTimer />
-    <PlayerList title="Field" :players="store.fieldPlayers" @toggle-position="store.togglePlayerPosition" />
+
+    <!-- Goalie Section -->
+    <div class="goalie-section card">
+      <h2>Goalie</h2>
+      <div v-if="store.currentGoalie" class="goalie-info">
+        <span class="player-name">{{ store.currentGoalie.name }}</span>
+        <button @click="store.removeGoalie()" class="btn-action btn-remove-goalie">Move to Bench</button>
+      </div>
+      <div v-else class="no-goalie">
+        No Goalie Assigned
+      </div>
+    </div>
+
+    <PlayerList title="Field Players" :players="store.fieldPlayers" @toggle-position="store.togglePlayerPosition" />
     <PlayerList
       title="Bench"
       :players="store.benchPlayers"
@@ -113,6 +126,70 @@ export default {
 .options-btn:hover {
   color: #007bff; /* Adjust hover color as needed */
 }
+
+.goalie-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f8ff; /* Light alice blue for distinction */
+  border: 1px solid #d1e7fd;
+  border-radius: 8px;
+}
+
+.goalie-section h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.goalie-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.goalie-info .player-name {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.btn-remove-goalie {
+  background-color: #ffc107; /* Warning yellow */
+  color: #333;
+  border-color: #ffc107;
+}
+.btn-remove-goalie:hover {
+  background-color: #e0a800;
+}
+
+.no-goalie {
+  color: #6c757d; /* Muted text color */
+  padding: 10px 0;
+  font-style: italic;
+}
+
+
+/* General card style if not already present */
+.card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* General button styles if not already present or to override */
+.btn-action {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
 
 /* Add other global styles or component-specific styles below if needed */
 #app {

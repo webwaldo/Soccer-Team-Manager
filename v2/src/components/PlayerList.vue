@@ -14,6 +14,12 @@
           <button class="action-btn" @click="$emit('toggle-position', player.name)">
             {{ player.onField ? 'To Bench' : 'To Field' }}
           </button>
+          <button
+            v-if="player.name !== store.goalieName"
+            class="action-btn btn-set-goalie"
+            @click="store.setGoalie(player.name)">
+            Set Goalie
+          </button>
         </div>
       </div>
     </div>
@@ -24,11 +30,15 @@
 </template>
 
 <script>
+import { useSoccerStore } from '../stores/soccerStore'; // Import the store
+
 export default {
   name: 'PlayerList',
   props: ['title', 'players'],
   emits: ['toggle-position', 'manage-players'],
   setup() {
+    const store = useSoccerStore(); // Instantiate the store
+
     const formatTime = (seconds) => {
       const minutes = Math.floor(seconds / 60);
       const remainingSeconds = seconds % 60;
@@ -36,13 +46,39 @@ export default {
     };
 
     return {
-      formatTime
+      formatTime,
+      store // Expose store to template
     };
   }
 };
 </script>
 
 <style scoped>
+/* Add styles for the new button */
+.btn-set-goalie {
+  background-color: #6c757d; /* Secondary/muted grey color */
+  color: white;
+  /* margin-left: 5px; Removed as buttons will be stacked */
+}
+
+.btn-set-goalie:hover {
+  background-color: #5a6268; /* Darker secondary on hover */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 8px; /* Space between stacked buttons */
+  align-items: flex-start; /* Align buttons to the start of the container */
+}
+
+.button-container .action-btn {
+  width: 100%; /* Make buttons take full width of their container */
+  box-sizing: border-box; /* Ensure padding and border don't expand width */
+  text-align: center;
+}
+
+
 .manage-players-btn {
   margin-top: 10px;
   padding: 10px 15px;
