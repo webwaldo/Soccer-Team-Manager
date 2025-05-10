@@ -1,14 +1,14 @@
 vueCopy<template>
     <div v-if="isOpen" class="modal-overlay">
       <div class="modal-content">
-        <h2>Manage Players</h2>
+        <h2>Manage Players ({{ allPlayers.length }})</h2>
         <div v-if="allPlayers.length === 0">No players available.</div>
         <div v-else>
-          <div v-for="player in allPlayers" :key="player.name" class="player-item">
+          <div v-for="player in sortedPlayers" :key="player.name" class="player-item">
             <span>
               {{ player.name }}
               <span class="player-status-icon">
-                [{{ player.status === 'goalie' ? 'G' : player.status === 'field' ? 'F' : player.status === 'bench' ? 'B' : 'R' }}]
+                {{ player.status === 'goalie' ? '[G]' : player.status === 'field' ? '⚽' : player.status === 'bench' ? '🪑' : '📋' }}
               </span>
             </span>
             <div class="button-group">
@@ -38,7 +38,22 @@ vueCopy<template>
     setup() {
       const store = useSoccerStore();
   
-      const allPlayers = computed(() => store.allPlayersDetailed); // Use the new detailed getter
+      const allPlayers = computed(() => store.allPlayersDetailed);
+
+      const sortedPlayers = computed(() => {
+        return [...allPlayers.value].sort((a, b) => {
+          if (a.source === 'roster' && b.source !== 'roster') {
+            return 1; // a comes after b
+          }
+          if (a.source !== 'roster' && b.source === 'roster') {
+            return -1; // a comes before b
+          }
+          // Optional: further sort non-roster players alphabetically or by status if needed
+          // if (a.name < b.name) return -1;
+          // if (a.name > b.name) return 1;
+          return 0; // keep original order for players of the same source type
+        });
+      });
   
       const movePlayerToRoster = (player) => {
         // Ensure player is active before moving
@@ -66,6 +81,7 @@ vueCopy<template>
   
       return {
         allPlayers,
+        sortedPlayers,
         movePlayerToRoster,
         clearPlayerStats,
         deletePlayer, // Expose new method
