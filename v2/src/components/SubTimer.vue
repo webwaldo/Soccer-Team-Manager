@@ -31,7 +31,7 @@
     name: 'SubTimer',
     setup() {
       const store = useSoccerStore();
-      const timerDurations = [1, 2, 3, 4, 5, 10];
+      const timerDurations = [3, 4, 5, 10, 15, 20];
       const selectedDuration = ref(5); // Default to 5 minutes
       const remainingTime = ref(selectedDuration.value * 60);
       const showTimerOptions = ref(false);
