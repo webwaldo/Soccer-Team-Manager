@@ -441,3 +441,21 @@ button:disabled {
 .action-btn:active {
     transform: scale(0.98);
 }
+.instructions {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.instructions h3 {
+    color: #333;
+    margin-top: 0;
+}
+
+.instructions p {
+    color: #555;
+    line-height: 1.6;
+}
