@@ -10,7 +10,7 @@
     </div>
     <div class="score-divider"></div>
     <div class="score-box">
-      <span class="score-label">Opponents</span>
+      <span class="score-label">Rival Team</span>
       <div class="score-controls">
         <button class="score-btn" @click="updateScore('other', -1)">-</button>
         <span class="score-value">{{ store.otherScore }}</span>
