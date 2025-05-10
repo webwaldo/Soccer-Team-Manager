@@ -4,10 +4,11 @@
       <h3>How to Use the App</h3>
       <ul>
         <li><strong>Add Players:</strong> Add each player once</li>
-        <li><strong>Manage Team:</strong> Click the "Manage Players" button to select the team for the match.</li>
         <li><strong>Start Game:</strong> Once players are added, you can manage game time and substitutions.</li>
         <li><strong>Track Score:</strong> Use the scoreboard to keep track of the game's progress.</li>
         <li><strong>Substitutions:</strong> Manage player substitutions efficiently during the game.</li>
+        <li><strong>Manage Team:</strong> Click the "Manage Players" button to select the team for the match.</li>
+        <li><strong>Options:</strong> Use the options cog to toggle Goalie and set player limit.</li>
       </ul>
       <button @click="closeModal">Got it!</button>
     </div>
