@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2>Add Player from Roster</h2>
+    <h2>Add Player to Bench from Roster</h2>
     <div id="roster" class="roster">
-      <div v-for="player in store.rosterPlayers" :key="player" class="roster-player" @click="addPlayer(player)">
+      <div v-for="player in store.rosterPlayers" :key="player" class="bench-icon roster-player" @click="addPlayer(player)">
         {{ player }}
       </div>
     </div>

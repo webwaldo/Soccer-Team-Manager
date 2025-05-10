@@ -2,9 +2,14 @@
   <div id="app">
     <header class="app-header">
       <h1>Soccer Subs App</h1>
-      <button @click="toggleManagementOptions" class="options-btn" title="Settings">
-        <i class="fas fa-cog"></i>
-      </button>
+      <div class="header-icons">
+        <button @click="openInstructionsModal" class="options-btn" title="Instructions">
+          <i class="fas fa-info-circle"></i>
+        </button>
+        <button @click="toggleManagementOptions" class="options-btn" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
     </header>
     <GameTime />
     <ScoreBoard />
@@ -33,6 +38,7 @@
     <RosterList :players="store.players" @add-player="store.addPlayer" />
     <ManagementOptions :is-open="showManagementOptions" @close="closeManagementOptions" />
     <ManagePlayersModal :is-open="isManagePlayersModalOpen" @close="closeManagePlayersModal" />
+    <InstructionsModal :show="showInstructionsModal" @close="closeInstructionsModal" />
   </div>
 </template>
 
@@ -47,6 +53,7 @@ import AddPlayer from './components/AddPlayer.vue';
 import RosterList from './components/RosterList.vue';
 import ManagementOptions from './components/ManagementOptions.vue';
 import ManagePlayersModal from './components/ManagePlayersModal.vue';
+import InstructionsModal from './components/InstructionsModal.vue';
 
 export default {
   name: 'App',
@@ -58,12 +65,22 @@ export default {
     AddPlayer,
     RosterList,
     ManagementOptions,
-    ManagePlayersModal
+    ManagePlayersModal,
+    InstructionsModal
   },
   setup() {
     const store = useSoccerStore();
     const isManagePlayersModalOpen = ref(false);
     const showManagementOptions = ref(false);
+    const showInstructionsModal = ref(false);
+
+    const openInstructionsModal = () => {
+      showInstructionsModal.value = true;
+    };
+
+    const closeInstructionsModal = () => {
+      showInstructionsModal.value = false;
+    };
 
     const toggleManagementOptions = () => {
       showManagementOptions.value = !showManagementOptions.value;
@@ -84,6 +101,10 @@ export default {
     onMounted(() => {
       store.loadState();
       store.updateGameTime();
+      // Open instructions modal on load if no players are present
+      if (store.players.length === 0) {
+        showInstructionsModal.value = true;
+      }
     });
 
     watch(() => store.$state, () => {
@@ -97,7 +118,10 @@ export default {
       closeManagePlayersModal,
       showManagementOptions,
       toggleManagementOptions,
-      closeManagementOptions
+      closeManagementOptions,
+      showInstructionsModal,
+      openInstructionsModal,
+      closeInstructionsModal
     };
   }
 };
@@ -112,6 +136,11 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 10px; /* Adjust gap between icons as needed */
 }
 
 .options-btn {
