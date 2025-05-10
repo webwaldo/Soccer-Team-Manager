@@ -5,12 +5,18 @@ vueCopy<template>
         <div v-if="allPlayers.length === 0">No players available.</div>
         <div v-else>
           <div v-for="player in allPlayers" :key="player.name" class="player-item">
-            <span>{{ player.name }}</span>
+            <span>
+              {{ player.name }}
+              <span class="player-status-icon">
+                [{{ player.status === 'goalie' ? 'G' : player.status === 'field' ? 'F' : player.status === 'bench' ? 'B' : 'R' }}]
+              </span>
+            </span>
             <div class="button-group">
-              <button @click="movePlayerToRoster(player)">
+              <button v-if="player.source === 'active'" @click="movePlayerToRoster(player)">
                 To Roster
               </button>
-              <button @click="clearPlayerStats(player)">Clear Stats</button>
+              <button v-if="player.source === 'active'" @click="clearPlayerStats(player)">Clear Stats</button>
+              <button @click="deletePlayer(player)" class="delete-btn">Delete</button>
             </div>
           </div>
         </div>
@@ -32,20 +38,37 @@ vueCopy<template>
     setup() {
       const store = useSoccerStore();
   
-      const allPlayers = computed(() => store.players);
+      const allPlayers = computed(() => store.allPlayersDetailed); // Use the new detailed getter
   
       const movePlayerToRoster = (player) => {
-        store.movePlayerToRoster(player.name);
+        // Ensure player is active before moving
+        if (player.source === 'active') {
+          store.movePlayerToRoster(player.name);
+        }
       };
   
       const clearPlayerStats = (player) => {
-        store.clearPlayerStats(player.name);
+        // Ensure player is active before clearing stats
+        if (player.source === 'active') {
+          store.clearPlayerStats(player.name);
+        }
+      };
+
+      const deletePlayer = (player) => {
+        if (confirm(`Are you sure you want to delete ${player.name}? This action cannot be undone.`)) {
+          if (player.source === 'active') {
+            store.removePlayer(player.name);
+          } else if (player.source === 'roster') {
+            store.removeRosterPlayer(player.name);
+          }
+        }
       };
   
       return {
         allPlayers,
         movePlayerToRoster,
         clearPlayerStats,
+        deletePlayer, // Expose new method
       };
     },
   };
@@ -92,11 +115,26 @@ vueCopy<template>
   
   .player-item button {
     padding: 5px 10px;
-    background-color: #3498db;
+    background-color: #3498db; /* Blue for general actions */
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    font-size: 0.9em;
+  }
+
+  .player-item button.delete-btn {
+    background-color: #e74c3c; /* Red for delete */
+  }
+  .player-item button.delete-btn:hover {
+    background-color: #c0392b;
+  }
+
+  .player-status-icon {
+    font-weight: bold;
+    margin-left: 8px;
+    font-size: 0.9em;
+    color: #555;
   }
   
   .player-item button:disabled {

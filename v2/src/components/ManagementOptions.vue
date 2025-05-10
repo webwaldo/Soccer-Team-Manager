@@ -13,32 +13,20 @@
           <input type="checkbox" id="goalieFeature" v-model="goalieFeatureControl" class="options-checkbox">
         </div>
         <div class="management-buttons">
-          <button @click="openDeletePlayersSubModal" class="success-btn">Manage Players</button>
+          <!-- The "Manage Players" button's functionality is now part of the main ManagePlayersModal -->
+          <!-- If this button was intended to open *that* modal, it would need to emit an event -->
+          <!-- For now, removing the button as its direct sub-modal is gone. -->
+          <!-- <button class="success-btn">Manage Players</button> -->
           <button @click="handleClearState" class="danger-btn">Clear All Data</button>
         </div>
       </div>
-
-      <!-- Sub-modal for Deleting Players -->
-      <div v-if="isDeletePlayersModalOpen" class="modal-overlay-sub" @click.self="closeDeletePlayersSubModal">
-        <div class="modal-content-sub">
-          <h2>Manage Players</h2>
-          <div v-if="allPlayers.length === 0" class="no-players-message">No players available to manage.</div>
-          <div v-else class="player-list-container">
-            <div v-for="player in allPlayers" :key="player.name" class="player-item">
-              <span>{{ player.name }}</span>
-              <span class="player-type-label">{{ getPlayerType(player) }}</span>
-              <button @click="deletePlayer(player)" class="delete-player-btn">Delete</button>
-            </div>
-          </div>
-          <button @click="closeDeletePlayersSubModal" class="sub-modal-close-button">Done</button>
-        </div>
-      </div>
+      <!-- Sub-modal for Deleting Players has been removed -->
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { computed } from 'vue'; // ref is no longer needed here
 import { useSoccerStore } from '../stores/soccerStore';
 
 export default {
@@ -46,15 +34,12 @@ export default {
   props: {
     isOpen: Boolean,
   },
-  emits: ['close'],
+  emits: ['close'], // Consider if an event like 'open-manage-players-modal' is needed
   setup(props, { emit }) {
     const store = useSoccerStore();
-    const isDeletePlayersModalOpen = ref(false);
+    // isDeletePlayersModalOpen and related logic removed
 
-    const allPlayers = computed(() => [
-      ...store.players.map(p => ({ ...p, type: 'active' })),
-      ...store.rosterPlayers.map(name => ({ name, type: 'roster' }))
-    ].sort((a,b) => a.name.localeCompare(b.name)));
+    // allPlayers computed property removed as it was for the sub-modal
 
     const maxPlayersControl = computed({
       get: () => store.maxPlayersOnField,
@@ -79,27 +64,7 @@ export default {
       }
     });
 
-    const openDeletePlayersSubModal = () => {
-      isDeletePlayersModalOpen.value = true;
-    };
-
-    const closeDeletePlayersSubModal = () => {
-      isDeletePlayersModalOpen.value = false;
-    };
-
-    const deletePlayer = (player) => {
-      // Confirmation is good practice but removed for brevity if not explicitly requested to be kept
-      // if (confirm(`Are you sure you want to delete ${player.name}?`)) {
-        if (player.type === 'active') {
-          store.removePlayer(player.name);
-        } else {
-          store.removeRosterPlayer(player.name);
-        }
-        if (allPlayers.value.length === 0) {
-            closeDeletePlayersSubModal(); // Close sub-modal if no players left
-        }
-      // }
-    };
+    // openDeletePlayersSubModal, closeDeletePlayersSubModal, and deletePlayer methods removed
 
     const handleClearState = () => {
       if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
@@ -110,18 +75,11 @@ export default {
       }
     };
 
-    const getPlayerType = (player) => {
-      return player.type === 'active' ? 'Active' : 'Roster';
-    };
+    // getPlayerType method removed as it was for the sub-modal
 
     return {
-      isDeletePlayersModalOpen,
-      allPlayers,
-      openDeletePlayersSubModal,
-      closeDeletePlayersSubModal,
-      deletePlayer,
+      // Removed: isDeletePlayersModalOpen, allPlayers, openDeletePlayersSubModal, closeDeletePlayersSubModal, deletePlayer, getPlayerType
       handleClearState,
-      getPlayerType,
       maxPlayersControl,
       goalieFeatureControl
     };
@@ -230,97 +188,5 @@ export default {
   background-color: #c9302c;
 }
 
-/* Sub-Modal (Delete Players) Styles */
-.modal-overlay-sub {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75); /* Darker for more focus */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050; /* Above main modal */
-}
-
-.modal-content-sub {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  max-width: 450px;
-  width: calc(100% - 40px);
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.modal-content-sub h2 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.no-players-message {
-  text-align: center;
-  color: #777;
-  padding: 20px 0;
-}
-
-.player-list-container {
-  max-height: 300px; /* Limit height and make scrollable if many players */
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
-
-.player-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f7f7f7;
-  border: 1px solid #eee;
-  border-radius: 4px;
-}
-
-.player-type-label {
-  font-size: 0.85em;
-  color: #555;
-  background-color: #e9ecef;
-  padding: 3px 7px;
-  border-radius: 3px;
-  margin-left: auto;
-  margin-right: 10px;
-}
-
-.delete-player-btn {
-  padding: 6px 10px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-}
-.delete-player-btn:hover {
-  background-color: #c0392b;
-}
-
-.sub-modal-close-button {
-  display: block;
-  width: 100%;
-  margin-top: 15px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-}
-.sub-modal-close-button:hover {
-  background-color: #0056b3;
-}
+/* Sub-Modal (Delete Players) Styles removed */
 </style>

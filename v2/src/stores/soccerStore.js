@@ -40,6 +40,27 @@ export const useSoccerStore = defineStore('soccer', {
       }
       return count;
     },
+allPlayersDetailed: (state) => {
+      const activePlayers = state.players.map(p => ({
+        ...p, // Includes name, onField, fieldTime, benchTime
+        source: 'active', // To know original source for deletion
+        status: state.goalieFeatureEnabled && p.name === state.goalieName ? 'goalie' : (p.onField ? 'field' : 'bench')
+      }));
+      const rosterOnlyPlayers = state.rosterPlayers.map(name => ({
+        name,
+        source: 'roster',
+        status: 'roster',
+        // Add default values for properties that might be accessed in the template for consistency
+        onField: false,
+        fieldTime: 0,
+        benchTime: 0,
+        // if goalie can be in roster, this might need adjustment, but current logic implies goalie is an active player
+      }));
+
+      // Combine and sort
+      return [...activePlayers, ...rosterOnlyPlayers]
+        .sort((a, b) => a.name.localeCompare(b.name));
+    },
   },
   actions: {
     setGoalieFeatureEnabled(enabled) {
