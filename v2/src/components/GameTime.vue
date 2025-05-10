@@ -101,4 +101,18 @@
   transition: background-color 0.3s ease;
 }
 
+@media (max-width: 768px) {
+  .game-time-wrapper {
+    padding-left: 0 !important; /* Remove left padding */
+    padding-right: 0 !important; /* Remove right padding */
+  }
+  #gameTime {
+    font-size: 1.2em; /* Optionally adjust font size */
+  }
+  .game-controls .toggle-game-btn,
+  .game-controls .reset-game-btn {
+    padding: 5px 8px; /* Smaller buttons on mobile */
+    font-size: 1.2em;
+  }
+}
 </style>
