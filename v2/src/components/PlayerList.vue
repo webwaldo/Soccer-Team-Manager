@@ -15,7 +15,7 @@
             {{ player.onField ? 'To Bench' : 'To Field' }}
           </button>
           <button
-            v-if="player.name !== store.goalieName"
+            v-if="store.goalieFeatureEnabled && player.name !== store.goalieName"
             class="action-btn btn-set-goalie"
             @click="store.setGoalie(player.name)">
             To Goalie
@@ -89,9 +89,6 @@ export default {
   background-color: #2d81b9; /* Darker secondary on hover */
 }
 
-.button-container {
-  
-}
 
 .button-container .action-btn {
   width: 100%; /* Make buttons take full width of their container */

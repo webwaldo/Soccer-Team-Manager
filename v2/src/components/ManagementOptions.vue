@@ -3,13 +3,17 @@
     <div class="modal-content-main">
       <button @click="$emit('close')" class="main-modal-close-button">&times;</button>
       <div class="management-options-content">
-        <h2>Management Options</h2>
+        <h2>Options</h2>
         <div class="options-group">
           <label for="maxPlayers">Max Players on Field:</label>
           <input type="number" id="maxPlayers" v-model.number="maxPlayersControl" min="1" class="options-input">
         </div>
+        <div class="options-group">
+          <label for="goalieFeature">Enable Goalie Feature:</label>
+          <input type="checkbox" id="goalieFeature" v-model="goalieFeatureControl" class="options-checkbox">
+        </div>
         <div class="management-buttons">
-          <button @click="openDeletePlayersSubModal" class="danger-btn">Manage Players</button>
+          <button @click="openDeletePlayersSubModal" class="success-btn">Manage Players</button>
           <button @click="handleClearState" class="danger-btn">Clear All Data</button>
         </div>
       </div>
@@ -68,6 +72,13 @@ export default {
       }
     });
 
+    const goalieFeatureControl = computed({
+      get: () => store.goalieFeatureEnabled,
+      set: (value) => {
+        store.setGoalieFeatureEnabled(value);
+      }
+    });
+
     const openDeletePlayersSubModal = () => {
       isDeletePlayersModalOpen.value = true;
     };
@@ -94,6 +105,7 @@ export default {
       if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
         store.clearState();
         // maxPlayersControl will automatically update due to reactivity with the store
+        // goalieFeatureControl will automatically update
         // emit('close'); // Optionally close the main modal
       }
     };
@@ -110,7 +122,8 @@ export default {
       deletePlayer,
       handleClearState,
       getPlayerType,
-      maxPlayersControl
+      maxPlayersControl,
+      goalieFeatureControl
     };
   }
 };
@@ -186,6 +199,12 @@ export default {
   width: 70px;
   text-align: center;
   font-size: 1em;
+}
+
+.options-checkbox {
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  margin-left: 10px; /* Spacing from label */
 }
 
 .management-buttons {

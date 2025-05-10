@@ -11,7 +11,7 @@
     <SubTimer />
 
     <!-- Goalie Section -->
-    <div class="goalie-section card">
+    <div v-if="store.goalieFeatureEnabled" class="goalie-section card">
       <h2>Goalie</h2>
       <div v-if="store.currentGoalie" class="goalie-info">
         <span class="player-name">{{ store.currentGoalie.name }}</span>
