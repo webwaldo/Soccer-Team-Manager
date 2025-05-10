@@ -204,4 +204,26 @@ export default {
   margin-right: auto;
   padding: 0 15px;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  #app {
+    padding: 0 8px; /* Reduced horizontal padding for mobile */
+    margin-top: 10px; /* Optionally reduce top margin as well */
+  }
+
+  .app-header h1 {
+    font-size: 1.5em; /* Slightly smaller title on mobile */
+  }
+
+  .options-btn {
+    font-size: 1.3rem; /* Slightly smaller options button */
+  }
+  
+  /* You might want to adjust padding/margins for other elements too for a tighter mobile layout */
+  .card, .goalie-section {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+}
 </style>

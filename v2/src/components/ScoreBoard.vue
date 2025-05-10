@@ -115,6 +115,7 @@ export default {
 
   .score-divider {
     height: 30px;
+    margin: 0 8px; /* Reduced horizontal margin for mobile */
   }
 
   .score-value {
