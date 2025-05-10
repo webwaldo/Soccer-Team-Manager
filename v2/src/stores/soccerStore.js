@@ -10,6 +10,7 @@ export const useSoccerStore = defineStore('soccer', {
     isGameRunning: false,
     lastUpdateTime: null,
     clearStateFlag: 0,
+    maxPlayersOnField: 7, // Default to 7 players
   }),
   getters: {
     fieldPlayers: (state) => state.players.filter(p => p.onField).sort((a, b) => b.fieldTime - a.fieldTime),
@@ -19,8 +20,8 @@ export const useSoccerStore = defineStore('soccer', {
     togglePlayerPosition(name) {
       const player = this.players.find(p => p.name === name);
       if (player) {
-        if (!player.onField && this.fieldPlayers.length >= 7) {
-          alert("You can't add more than 7 players to the field.");
+        if (!player.onField && this.fieldPlayers.length >= this.maxPlayersOnField) {
+          alert(`You can't add more than ${this.maxPlayersOnField} players to the field.`);
           return;
         }
         player.onField = !player.onField;
@@ -122,6 +123,11 @@ export const useSoccerStore = defineStore('soccer', {
       if (player) {
         player.fieldTime = 0;
         player.benchTime = 0;
+      }
+    },
+    setMaxPlayersOnField(limit) {
+      if (typeof limit === 'number' && limit > 0) {
+        this.maxPlayersOnField = limit;
       }
     },
   },
